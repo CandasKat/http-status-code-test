@@ -22,11 +22,15 @@ const authUser = async (req, res, next) => {
     next();
   };
 
-const fetchImage = async (statusCode, res) => {
+  const fetchImage = async (statusCode, res) => {
     const response = await fetch(`https://http.cat/${statusCode}.jpg`);
     const buffer = await response.buffer();
-    res.setHeader("Content-Type", "image/jpeg");
-    res.send(buffer);
+    const base64Image = buffer.toString('base64');
+    res.status(statusCode);
+    res.setHeader("Content-Type", "text/html");
+    res.send(`<img src="data:image/jpeg;base64,${base64Image}" />`);
 };
+
+
 
 module.exports = {authUser, fetchImage};
